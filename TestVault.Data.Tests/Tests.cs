@@ -3,9 +3,11 @@ using NUnit.Framework;
 using TestVault.Data;
 using TestVault.Data.SQLite;
 
+using TestVault.NUnit;
+
 namespace TestVault.Data.Tests
 {
-    public class SQLite
+    public class SQLiteTests : TestVaultTestBase
     {
         string buildid = "testvault-tests-001";
         TestProject project = new TestProject(){ Project = "testvault-tests" };
@@ -66,6 +68,24 @@ namespace TestVault.Data.Tests
             {
                 db.Delete( p );
             }
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+
+        }
+
+        [Test]
+        public void SomeTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test]
+        public void IgnoredTest()
+        {
+            Assert.Ignore("no thanks");
         }
     }
 }

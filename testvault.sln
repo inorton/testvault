@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.Data.SQLite", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.Data.Tests", "TestVault.Data.Tests\TestVault.Data.Tests.csproj", "{21386A56-90EA-4B20-8EBE-F203B1F9C2E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.NUnit", "TestVault.NUnit\TestVault.NUnit.csproj", "{B100B96E-5126-42ED-9DFB-5B503153E03C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -37,6 +39,10 @@ Global
 		{A2D48155-00E0-45CA-9010-7796F46C2A7E}.Debug|x86.Build.0 = Debug|x86
 		{A2D48155-00E0-45CA-9010-7796F46C2A7E}.Release|x86.ActiveCfg = Release|x86
 		{A2D48155-00E0-45CA-9010-7796F46C2A7E}.Release|x86.Build.0 = Release|x86
+		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = testvault\testvault.csproj

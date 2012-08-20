@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using TestVault.Data;
@@ -56,7 +57,8 @@ results (
  TestGroup text,
  BuildId text,
  IsPersonal boolean,
- Timestamp datetime
+ Timestamp datetime,
+ Session text
 )");
 
             NonQuery(conn,@"CREATE INDEX IF NOT EXISTS 
@@ -140,11 +142,11 @@ builds_idx ON results (
                 using ( var cmd = new SqliteCommand( conn ) ){
                     var build = "";
                     if ( !string.IsNullOrEmpty(buildId) ){
-                        build = @"AND BuildId = :BID";
+                        build = @" AND BuildId = :BID";
                         cmd.Parameters.Add( new SqliteParameter( ":BID", buildId ) );
                     }
 
-                    cmd.Parameters.Add( new SqliteParameter( ":PROJ", tgroup.Project ) );
+                    cmd.Parameters.Add( new SqliteParameter( ":PROJ", tgroup.Project.Project ) );
                     cmd.Parameters.Add( new SqliteParameter( ":GRP", tgroup.Name ) );
 
                     cmd.CommandText = @"SELECT 
@@ -152,8 +154,10 @@ builds_idx ON results (
  Outcome,
  Description,
  Notes,
- Timetamp,
- IsPersonal
+ Timestamp,
+ IsPersonal,
+ BuildId,
+ Session
 FROM results 
  WHERE Project = :PROJ 
  AND TestGroup = :GRP " + build + " ORDER BY Timestamp DESC";
@@ -163,11 +167,21 @@ FROM results
                             var t = new TestResult();
                             t.Group = tgroup;
                             t.Name = sth.GetString(0);
-                            t.Outcome = (TestOutcome) sth.GetInt32(1);
-                            t.Description = sth.GetString(2);
-                            t.Notes = sth.GetString(3);
+                            t.Outcome = (TestOutcome) Enum.ToObject( typeof(TestOutcome), sth.GetInt32(1) );
+                            if ( sth[2] != DBNull.Value ){
+
+                                t.Description = sth.GetString(2);
+                            }
+                            if ( sth[3] != DBNull.Value )
+                                t.Notes = sth.GetString(3);
                             t.Time = sth.GetDateTime(4);
                             t.IsPersonal = sth.GetBoolean(5);
+
+                            if ( sth[6] != DBNull.Value )
+                                t.BuildID = sth.GetString(6);
+
+                            if ( sth[7] != DBNull.Value )
+                                t.TestSession = sth.GetString(7);
 
                             rv.Add(t);
                         }
@@ -213,16 +227,20 @@ FROM results
                         cmd.CommandText = string.Format("SELECT BuildId, Timestamp FROM results {0}", conds);
 
                         using ( var sth = cmd.ExecuteReader() ){
-                            var buildid = sth.GetString(0);
-                            var buildtime = sth.GetDateTime(1);
-                            if ( ( since == null ) || ( buildtime > since.Value ) ){
-                                if ( ( until == null ) || ( buildtime <= until.Value ) ){
-                                    rv.Add( buildid );
+
+                            while ( sth.Read() ){
+                                var buildid = sth.GetString(0);
+                                var buildtime = sth.GetDateTime(1);
+                                if ( ( since == null ) || ( buildtime > since.Value ) ){
+                                    if ( ( until == null ) || ( buildtime <= until.Value ) ){
+                                        rv.Add( buildid );
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                rv = new List<string>( rv.Distinct() );
             }
             return rv;
         }
@@ -241,7 +259,8 @@ FROM results
  Project,
  TestGroup,
  BuildId,
- IsPersonal
+ IsPersonal,
+ Session
 ) 
 VALUES (
  :NAME,
@@ -252,7 +271,8 @@ VALUES (
  :PROJ,
  :GRP,
  :BUILD,
- :PERS
+ :PERS,
+ :SESS
 )";
                     cmd.Parameters.Add( new SqliteParameter( ":NAME", result.Name ) );
                     cmd.Parameters.Add( new SqliteParameter( ":OUTC", (int)result.Outcome ) );
@@ -263,6 +283,7 @@ VALUES (
                     cmd.Parameters.Add( new SqliteParameter( ":GRP", result.Group.Name ) );
                     cmd.Parameters.Add( new SqliteParameter( ":BUILD", result.BuildID ) );
                     cmd.Parameters.Add( new SqliteParameter( ":PERS", result.IsPersonal ) );
+                    cmd.Parameters.Add( new SqliteParameter( ":SESS", result.TestSession ) );
 
                     cmd.ExecuteNonQuery();
                 }

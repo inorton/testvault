@@ -1,9 +1,7 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace TestVault.Data
 {
-    [Serializable]
     public class TestResult
     {
         public DateTime Time { get; set; }
@@ -21,6 +19,8 @@ namespace TestVault.Data
         public TestGroup Group { get; set; }
 
         public string BuildID { get; set; }
+
+        public string TestSession { get; set; }
 
         public bool IsPersonal { get; set; }
 

@@ -18,7 +18,6 @@ namespace TestVault.Core
 
             throw new NotSupportedException( String.Format("unsupported backend {0}", type) );
         }
-
     }
 }
 

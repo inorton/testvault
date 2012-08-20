@@ -8,9 +8,9 @@ using TestVault.Data;
 namespace TestVault
 {
 
-
     public class Page
     {
+
         public static KeyValuePair<string,string> Pair(string a, string b)
         {
             return new KeyValuePair<string, string>( a, b );
@@ -112,87 +112,35 @@ namespace TestVault
 
         public Page()
         {
-            Results = new List<TestResult>();
-            Projects = new List<TestProject>();
-            Builds = new List<string>();
             Params = new Dictionary<string, string>();
-
         }
 
         public string Title { get; set; }
 
         public string Heading { get; set; }
 
-        public TestProject Project { get; set; }
+        public string StyleSheet { get; set; }
 
-        public string BuildId { get; set; }
+        public Dictionary<string,string> Params { get; set; }
 
-        public TestGroup Group { get; set; }
-
-        public List<TestResult> Results { get; private set; }
-
-        public List<TestProject> Projects { get; private set; }
-
-        public List<string> Builds { get; private set; }
-
-        public Dictionary<string,string> Params { get; private set; }
-
-        string BuildsList()
+        public virtual IEnumerable<string> Sections
         {
-            var bl = new List<string>();
-            foreach ( var b in Builds.OrderBy( x => x ) )
-                bl.Add(
-                    Tag("li",
-                    SelfLink(b, Pair( "buildid", b ) ) ) );
-
-            return Tag("ul",
-                       bl.ToArray());
-        }
-
-        string ProjectsList()
-        {
-            var pl = new List<string>();
-            foreach ( var p in Projects.OrderBy( x => x.Project ) )
-                pl.Add( Tag("li", 
-                            SelfLink( p.Project, Pair("project",p.Project ) ) ) );
-
-            return Tag("ul",
-                       pl.ToArray());
-        }
-
-        string ResultsTable()
-        {
-
-            var headings = Tag("tr",
-                               Tag("th", "Group"),
-                               Tag("th", "Name"),
-                               Tag("th", "Outcome"));
-
-            var rows = new List<string>();
-            rows.Add(headings);
-
-
-            foreach (var res in Results.OrderBy( x => x.Group.Name ) )
+            get
             {
-                rows.Add( Tag("tr",
-                              Tag("td",res.Group.Name),
-                              Tag("td",res.Name),
-                              Tag("td",res.Outcome.ToString())) );
+                return new string[] { };
             }
-
-
-
-            var table = Tag("table",
-                            rows.ToArray());
-
-            return table;
         }
-
 
         public override string ToString()
         {
+            var css = "";
+            if (!String.IsNullOrEmpty(StyleSheet))
+            {
+                css = Tag(string.Format("link,href:{0},rel:stylesheet,type:text/css", StyleSheet));
+            }
+
             var head = Tag("head",
-                           Tag("title", Title));
+                           Tag("title", Title), css);
 
 
             var preamble = Tag("div",
@@ -201,26 +149,12 @@ namespace TestVault
                                Tag("h1", Heading)
             );
 
-            var body = "";
-
-            if (Projects.Count > 0)
-            {
-                body += ProjectsList();
-            }
-
-            if (Builds.Count > 0)
-            {
-                body += BuildsList();
-            }
-
-            if ( Results.Count > 0 ){
-                body += ResultsTable();
-            }
+            var parts = new List<string> { preamble };
+           
+            parts.AddRange( Sections );
 
             return Tag("html", head,
-                       Tag("body",
-                preamble,
-                body ) );
+                       Tag("body", parts.ToArray() ) );
         }
     }
 }

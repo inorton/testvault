@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Tests.cs" />
+    <Compile Include="SubClassTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -47,6 +48,10 @@
     <ProjectReference Include="..\TestVault.Data\TestVault.Data.csproj">
       <Project>{8C1D9A79-D6C5-4257-9B3C-92CBD5A02280}</Project>
       <Name>TestVault.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestVault.NUnit\TestVault.NUnit.csproj">
+      <Project>{B100B96E-5126-42ED-9DFB-5B503153E03C}</Project>
+      <Name>TestVault.NUnit</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -41,39 +41,139 @@ namespace TestVault
 
         public static Dictionary<string,string> QueryDictionary(HttpListenerRequest req)
         {
+
             var rv = new Dictionary<string,string>();
             for ( int i = 0; i < req.QueryString.Count; i++ ){
+
                 var k = req.QueryString.GetKey(i);
-                var v = req.QueryString.GetValues(i) as string[] ;
-                rv[k] = string.Join(",",v);
+                if ( !string.IsNullOrEmpty(k) ){
+                    var v = req.QueryString.GetValues(i) as string[] ;
+                    rv[k] = string.Join(",",v);
+                }
             } 
+
             return rv;
         }
 
         public void HandleRequest(HttpListenerContext ctx)
         {
             var req = ctx.Request;
+
             var p = QueryDictionary(req);
-            if (p.ContainsKey("add"))
+
+            try
             {
-                SubmitResult(ctx);
-            } else
+
+                if (p.ContainsKey("add"))
+                {
+                    SubmitResult(ctx);
+                } else
+                {
+                    var want = p.GetString("want");
+
+                    switch ( want ){
+                        case "css":
+                            Css(ctx);
+                            break;
+
+                        default:
+                            List(ctx);
+                            break;
+                    }
+                }
+            } catch (Exception e)
             {
-                List(ctx);
+                Console.Error.WriteLine(e);
+                try {
+                    var resp = ctx.Response;
+                    resp.StatusCode = 500;
+
+                    var error = Page.Tag("html",
+                                    Page.Tag("head", Page.Tag("title","Server Error")),
+                                    Page.Tag("body", Page.Tag("h1", "500 Server Error"), Page.Tag("hr"), Page.Tag("pre",e.ToString()) ) );
+                    var buf = Encoding.UTF8.GetBytes(error);
+
+                    resp.OutputStream.Write( buf, 0, buf.Length );
+                    resp.Close();
+
+                } catch {}
             }
+        }
+
+        public void Css(HttpListenerContext ctx)
+        {
+            var resp = ctx.Response;
+            var css = @"
+
+.header {
+ background-color: #ccccff;
+}
+
+span.failed {
+ background-color: red;
+ color: black;
+}
+
+span.ignored {
+ background-color: yellow;
+ color: black;
+}
+
+span.passed {
+ background-color: green;
+ color: black;
+}
+
+
+span.testgroupname {
+ font-size: 1.1em;
+ font-weight: bold;
+}
+
+";
+
+            var buf = Encoding.UTF8.GetBytes(css);
+
+            resp.OutputStream.Write(buf, 0, buf.Length);
+            resp.OutputStream.Close();
         }
 
         public void List(HttpListenerContext ctx)
         {
-            var page = new Page() { Title = "Results List", Heading = "Test Results" };
+            var page = new ListPage() { Title = "Results List", Heading = "Test Results" };
+
 
             var args = QueryDictionary(ctx.Request);
+            page.StyleSheet = "?want=css";
+            page.Params = args;
 
-            if (!args.ContainsKey("project"))
+            DateTime? since = args.GetDateTime("since");
+            DateTime? until = args.GetDateTime("until");
+            page.BuildId = args.GetString("buildid");
+
+            var project = args.GetString("project");
+
+            if (string.IsNullOrEmpty(project))
             {
-                var prs = DataStore.GetProjects();
-                page.Projects.AddRange(prs);
-            } 
+                page.Projects.AddRange(DataStore.GetProjects());
+            } else
+            {
+                page.Project = new TestProject() { Project = project };
+                if ( string.IsNullOrEmpty(page.BuildId) )
+                {
+                    page.Builds.AddRange( DataStore.GetBuilds( page.Project, null, since, until ) );
+                } else {
+                    // get the tests for this project at this build
+                    var grps = DataStore.GetGroups( page.Project );
+                    foreach ( var grp in grps ){
+                        var tests = DataStore.GetResults( grp, page.BuildId );
+                        if ( tests.Count > 0 ){
+                            page.Results[grp] = new List<TestResult>();
+                            page.Results[grp].AddRange( tests );
+                        }
+                    }
+                }
+            }
 
             var buf = Encoding.UTF8.GetBytes(page.ToString());
             var resp = ctx.Response;
@@ -98,16 +198,16 @@ namespace TestVault
                 var name = args["name"];
                 var date = DateTime.Now;
                 var outc = args["outcome"];
+                var sess = args["session"];
                 var outcome = (TestOutcome)Enum.Parse(typeof(TestOutcome), outc);
-
-
 
                 var tr = new TestResult(){ 
                     Group = pgroup,
                     Time = date,
                     BuildID = build,
                     Name = name,
-                    Outcome = outcome 
+                    Outcome = outcome,
+                    TestSession = sess,
                 };
 
                 if ( args.ContainsKey("desc") ){

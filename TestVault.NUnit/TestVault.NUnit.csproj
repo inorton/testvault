@@ -2,15 +2,15 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A2D48155-00E0-45CA-9010-7796F46C2A7E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>testvault</RootNamespace>
-    <AssemblyName>testvault</AssemblyName>
+    <ProjectGuid>{B100B96E-5126-42ED-9DFB-5B503153E03C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>TestVault.NUnit</RootNamespace>
+    <AssemblyName>TestVault.NUnit</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
@@ -18,35 +18,29 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>True</Externalconsole>
-    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="ListPage.cs" />
-    <Compile Include="Helpers.cs" />
+    <Compile Include="TestVaultUtils.cs" />
+    <Compile Include="TestVaultTestBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\TestVault.Core\TestVault.Core.csproj">
-      <Project>{5935E636-58F3-42BF-A512-200BDE04B5C1}</Project>
-      <Name>TestVault.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestVault.Data\TestVault.Data.csproj">
       <Project>{8C1D9A79-D6C5-4257-9B3C-92CBD5A02280}</Project>
       <Name>TestVault.Data</Name>
