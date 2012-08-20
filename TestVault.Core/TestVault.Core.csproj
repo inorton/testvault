@@ -32,8 +32,18 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TestStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\TestVault.Data.SQLite\TestVault.Data.SQLite.csproj">
+      <Project>{5EA19EAF-3C9B-4BB5-B5FA-F2D8F1B4F31A}</Project>
+      <Name>TestVault.Data.SQLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestVault.Data\TestVault.Data.csproj">
+      <Project>{8C1D9A79-D6C5-4257-9B3C-92CBD5A02280}</Project>
+      <Name>TestVault.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
