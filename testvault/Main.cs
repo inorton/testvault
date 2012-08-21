@@ -66,7 +66,7 @@ namespace TestVault
             try
             {
 
-                if (req.HttpMethod.ToUpper() == "POST")
+                if ((req.HttpMethod.ToUpper() == "POST") || p.ContainsKey("add"))
                 {
                     SubmitResult(ctx);
                 } else
@@ -188,16 +188,55 @@ span.testgroupname {
         public void SubmitResult( HttpListenerContext ctx )
         {
             var req = ctx.Request;
-            if ( !req.HttpMethod.ToUpper().Equals("POST") ) throw new InvalidOperationException("POST expected");
-
+            var args = QueryDictionary(ctx.Request);
+            
             var resp = ctx.Response;
             resp.StatusCode = 500;
 
             var sb = new StringBuilder();
 
             try {
-                var xsc = new XmlSerializer(typeof(TestResult));
-                var tr = (TestResult)xsc.Deserialize(req.InputStream);
+                TestResult tr;
+                if ( !req.HttpMethod.ToUpper().Equals("POST") ) {
+                    var xsc = new XmlSerializer(typeof(TestResult));
+                    tr = (TestResult)xsc.Deserialize(req.InputStream);
+                } else {
+                    var project = new TestProject()
+                    { 
+                        Project = args["project"], 
+                        DataStore = DataStore
+                    };
+                    var pgroup = new TestGroup() { 
+                        Project = project, Name = args["group"] };
+                    var build = args["buildid"];
+                    var name = args["name"];
+                    var date = DateTime.Now;
+                    var outc = args["outcome"];
+                    var sess = args["session"];
+                    var outcome = (TestOutcome)Enum.Parse(typeof(TestOutcome), outc);
+
+                    tr = new TestResult(){ 
+                        Group = pgroup,
+                        Time = date,
+                        BuildID = build,
+                        Name = name,
+                        Outcome = outcome,
+                        TestSession = sess,
+                    };
+
+                    if ( args.ContainsKey("desc") ){
+                        tr.Description = args["desc"];
+                    }
+                    if ( args.ContainsKey("note") ){
+                        tr.Notes = args["note"];
+                    }
+                    if ( args.ContainsKey("personal") )
+                    {
+                        bool pers = false;
+                        bool.TryParse( args["personal"], out pers );
+                        tr.IsPersonal = pers;
+                    }
+                }
 
                 DataStore.Save(tr);
 
