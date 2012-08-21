@@ -5,11 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{21386A56-90EA-4B20-8EBE-F203B1F9C2E9}</ProjectGuid>
+    <ProjectGuid>{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>TestVault.Data.Tests</RootNamespace>
-    <AssemblyName>TestVault.Data.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>TestVault.NUnit.Thales</RootNamespace>
+    <AssemblyName>TestVault.NUnit.Thales</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -37,18 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
+    <Compile Include="TesTestBase.cs" />
+    <Compile Include="ExampleTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\TestVault.Data.SQLite\TestVault.Data.SQLite.csproj">
-      <Project>{5EA19EAF-3C9B-4BB5-B5FA-F2D8F1B4F31A}</Project>
-      <Name>TestVault.Data.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestVault.Data\TestVault.Data.csproj">
-      <Project>{8C1D9A79-D6C5-4257-9B3C-92CBD5A02280}</Project>
-      <Name>TestVault.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestVault.NUnit\TestVault.NUnit.csproj">
       <Project>{B100B96E-5126-42ED-9DFB-5B503153E03C}</Project>
       <Name>TestVault.NUnit</Name>

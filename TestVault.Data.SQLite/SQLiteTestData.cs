@@ -247,6 +247,8 @@ FROM results
 
         public void Save(TestResult result)
         {
+            result.Time = DateTime.Now;
+
             using (var conn = Connect())
             {
                 using ( var cmd = new SqliteCommand( conn ) ){

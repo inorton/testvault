@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.Data.Tests", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.NUnit", "TestVault.NUnit\TestVault.NUnit.csproj", "{B100B96E-5126-42ED-9DFB-5B503153E03C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.NUnit.Thales", "TestVault.NUnit.Thales\TestVault.NUnit.Thales.csproj", "{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -43,6 +45,10 @@ Global
 		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Debug|x86.Build.0 = Debug|Any CPU
 		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Release|x86.ActiveCfg = Release|Any CPU
 		{B100B96E-5126-42ED-9DFB-5B503153E03C}.Release|x86.Build.0 = Release|Any CPU
+		{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}.Debug|x86.Build.0 = Debug|Any CPU
+		{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}.Release|x86.ActiveCfg = Release|Any CPU
+		{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = testvault\testvault.csproj

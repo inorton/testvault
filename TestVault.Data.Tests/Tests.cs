@@ -69,24 +69,6 @@ namespace TestVault.Data.Tests
                 db.Delete( p );
             }
         }
-
-        [TearDown]
-        public void TearDown()
-        {
-
-        }
-
-        [Test]
-        public void SomeTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test]
-        public void IgnoredTest()
-        {
-            Assert.Ignore("no thanks");
-        }
     }
 }
 

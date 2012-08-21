@@ -5,6 +5,11 @@ using TestVault.Data;
 
 namespace TestVault
 {
+    class TestSession {
+        public string Session { get; set;}
+        public DateTime Time { get; set; }
+    }
+
     public class ListPage : Page
     {
         public ListPage() : base ()
@@ -91,7 +96,15 @@ namespace TestVault
             }
 
             // limit to 50 sessions displayed at once.
-            var sessions = ( from t in alltests select t.TestSession ).OrderByDescending( x => x ).Distinct().Take(50);
+
+            var sdata = new Dictionary<string,TestSession>();
+
+            foreach (var t in alltests)
+            {
+                if ( !sdata.ContainsKey(t.TestSession) ) {
+                    sdata[t.TestSession] = new TestSession() { Session = t.TestSession, Time = t.Time };
+                }
+            }
 
             var rows = new List<string>();
 
@@ -109,15 +122,15 @@ namespace TestVault
 
                     var outcomes = new List<string>();
 
-                    foreach ( var s in sessions ){
-                        var tsess = from t in Results[grp] where ( t.Name == tname ) && ( t.TestSession == s ) select t;
+                    foreach ( var s in sdata.Values.OrderByDescending(x => x.Time) ){
+                        var tsess = from t in Results[grp] where ( t.Name == tname ) && ( t.TestSession == s.Session ) select t;
                         if ( tsess.Count() == 0 ){
                             outcomes.Add("-");
                         } else {
                             var oc = tsess.FirstOrDefault().Outcome;
                             var code = oc.Code();
                             var oclass = oc.ToString().ToLower();
-                            outcomes.Add(Tag(string.Format("span.{0}",oclass),code));
+                            outcomes.Add(Tag(string.Format("span.{0},title:{1}",oclass,s.Session),code));
                         }
                     }
                     row.Add(Tag("td.testresults,align:left",Tag("pre",string.Join("",outcomes.ToArray()))));

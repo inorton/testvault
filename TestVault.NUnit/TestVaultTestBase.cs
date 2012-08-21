@@ -22,10 +22,19 @@ namespace TestVault.NUnit
             }
         }
 
+
+        /// <summary>
+        /// Gets the test test group.
+        /// </summary>
+        /// <remarks>
+        /// This might be a component name, or server, or perhaps component@arch, eg,  cutils@v12_0lin1
+        /// </remarks>            
         public virtual string TestVaultGroup 
         {
             get {
-                return GetType().Name;
+
+
+                return String.Format("{0}@{1}", GetType().Name, Environment.MachineName );
             }
         }
 
@@ -46,16 +55,35 @@ namespace TestVault.NUnit
 
         protected Dictionary<string,TestStatus> runtimeHistory = new Dictionary<string, TestStatus>();
 
-        protected string testVaultSession = null;
+        /// <summary>
+        /// Gets or sets the test session identifier.
+        /// </summary>
+        /// <remarks>
+        /// This might be a date or a version control identifier ( like a change number )
+        /// </remarks>            
+        public virtual string TestVaultSession
+        { 
+            get
+            { 
+                if ( String.IsNullOrEmpty( _testVaultSessionID ) ){
+                    _testVaultSessionID = DateTime.Now.ToString("s");
+                }
+                return _testVaultSessionID;
+            }
+            set
+            {
+                _testVaultSessionID = value;
+            }
+        }
+
+        static string _testVaultSessionID;
+
 
         [TearDown]
         public void AfterTest()
         {
             var ctx = TestContext.CurrentContext;
             var name = ctx.Test.FullName;
-
-            if ( testVaultSession == null )
-                testVaultSession = DateTime.Now.ToString("s");
 
             if ( !runtimeHistory.ContainsKey(name) || ( runtimeHistory[name] != ctx.Result.Status ) ){
 
@@ -77,7 +105,7 @@ namespace TestVault.NUnit
                     break;
                 }
                 runtimeHistory[name] = ctx.Result.Status;
-                TestVaultUtils.SubmitResult( TestVaultServer, testVaultSession, TestVaultProject, TestVaultBuildId, TestVaultGroup, name, outcome, TestVaultIsPersonal );
+                TestVaultUtils.SubmitResult( TestVaultServer, TestVaultSession, TestVaultProject, TestVaultBuildId, TestVaultGroup, name, outcome, TestVaultIsPersonal );
             }
         }
 
