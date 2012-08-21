@@ -8,6 +8,7 @@ namespace TestVault.Data
     {
         public string Project { get; set; }
 
+        [System.Xml.Serialization.XmlIgnore]
         public ITestVaultData DataStore { get; set; }
     }
 }

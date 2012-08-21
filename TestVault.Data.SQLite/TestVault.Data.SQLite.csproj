@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>TestVault.Data.SQLite</RootNamespace>
     <AssemblyName>TestVault.Data.SQLite</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

@@ -1,7 +1,10 @@
 using System;
+using System.Text;
 using System.Net;
 using TestVault.Data;
 using System.Security;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace TestVault.NUnit
 {
@@ -12,22 +15,32 @@ namespace TestVault.NUnit
             try
             {
                 using ( var client = new WebClient() ){
+
                     client.BaseAddress = testVaultServer.ToString();
                     client.CachePolicy = new System.Net.Cache.RequestCachePolicy( System.Net.Cache.RequestCacheLevel.NoCacheNoStore );
-                    client.QueryString.Add( "add", "1" );
-                    client.QueryString.Add( "project", SecurityElement.Escape( project ) );
-                    client.QueryString.Add( "buildid", SecurityElement.Escape( buildname ) );
-                    client.QueryString.Add( "group", SecurityElement.Escape( testgroup ) );
-                    client.QueryString.Add( "name", SecurityElement.Escape( testname ) );
-                    client.QueryString.Add( "outcome", SecurityElement.Escape( outcome.ToString() ) );
-                    client.QueryString.Add( "session", SecurityElement.Escape( session ) );
-                    client.QueryString.Add( "personal", SecurityElement.Escape( personal.ToString() ) );
+                    client.Headers.Add("Content-Type", "text/xml");
 
-                    client.UploadValues( testVaultServer.ToString(), client.QueryString );
+
+                    var result = new TestResult() 
+                    {
+                        Group = new TestGroup() { Name = testgroup, Project = new TestProject() { Project = project } },
+                        Name = testname,
+                        Outcome = outcome,
+                        TestSession = session,
+                        IsPersonal = personal,
+                        BuildID = buildname,
+                    };
+
+                    var xc = new XmlSerializer(result.GetType());
+                    var io = new System.IO.MemoryStream();
+                    xc.Serialize( io, result );
+
+                    client.UploadData( testVaultServer.ToString(), io.ToArray() );
+
                 }
-            } catch 
+            } catch ( Exception e )
             {
-               
+                Console.Error.WriteLine( e );
             }
         }
     }

@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>TestVault.Core</RootNamespace>
     <AssemblyName>TestVault.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

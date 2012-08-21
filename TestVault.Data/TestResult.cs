@@ -1,7 +1,9 @@
 using System;
 
+
 namespace TestVault.Data
 {
+    [Serializable]
     public class TestResult
     {
         public DateTime Time { get; set; }
