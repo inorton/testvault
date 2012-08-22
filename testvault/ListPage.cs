@@ -70,7 +70,7 @@ namespace TestVault
             foreach ( var b in Builds.OrderBy( x => x ) )
                 bl.Add(
                     Tag("li",
-                    SelfLink(b, Pair( "buildid", b ) ) ) );
+                    SelfLink(b, Pair( "buildid", System.Security.SecurityElement.Escape(b) ) ) ) );
 
             return Tag("ul",
                        bl.ToArray());

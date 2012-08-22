@@ -40,6 +40,7 @@
     <Compile Include="TestOutcome.cs" />
     <Compile Include="TestProject.cs" />
     <Compile Include="TestGroup.cs" />
+    <Compile Include="TestVaultUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

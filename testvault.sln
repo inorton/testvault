@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.NUnit", "TestVaul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVault.NUnit.Thales", "TestVault.NUnit.Thales\TestVault.NUnit.Thales.csproj", "{E0768D6A-9AC9-49DC-9AAA-38D6D9B17644}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testvault_submit", "testvault_submit\testvault_submit.csproj", "{599BD9F1-568F-4179-8265-433084F48D0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -29,6 +31,10 @@ Global
 		{5935E636-58F3-42BF-A512-200BDE04B5C1}.Debug|x86.Build.0 = Debug|Any CPU
 		{5935E636-58F3-42BF-A512-200BDE04B5C1}.Release|x86.ActiveCfg = Release|Any CPU
 		{5935E636-58F3-42BF-A512-200BDE04B5C1}.Release|x86.Build.0 = Release|Any CPU
+		{599BD9F1-568F-4179-8265-433084F48D0A}.Debug|x86.ActiveCfg = Debug|x86
+		{599BD9F1-568F-4179-8265-433084F48D0A}.Debug|x86.Build.0 = Debug|x86
+		{599BD9F1-568F-4179-8265-433084F48D0A}.Release|x86.ActiveCfg = Release|x86
+		{599BD9F1-568F-4179-8265-433084F48D0A}.Release|x86.Build.0 = Release|x86
 		{5EA19EAF-3C9B-4BB5-B5FA-F2D8F1B4F31A}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{5EA19EAF-3C9B-4BB5-B5FA-F2D8F1B4F31A}.Debug|x86.Build.0 = Debug|Any CPU
 		{5EA19EAF-3C9B-4BB5-B5FA-F2D8F1B4F31A}.Release|x86.ActiveCfg = Release|Any CPU

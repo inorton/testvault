@@ -6,17 +6,38 @@ using System.Xml.Serialization;
 using TestVault.Core;
 using TestVault.Data;
 
-
+using TestVault.Mono.Options;
 
 namespace TestVault
 {
     class MainClass
     {
+        static OptionSet opts;
+
+        public static void Help()
+        {
+            Console.Error.WriteLine("Usage {0} [OPTIONS]", "testvault" );
+
+            opts.WriteOptionDescriptions( Console.Error );
+
+        }
+
         public static void Main(string[] args)
         {
             var w = new WebServer();
+
+            opts = new OptionSet();
+            opts.Add("help|h", "Print this message", x => {
+                Help();
+                Environment.Exit(0);
+            } );
+
+            opts.Parse( args );
+
             w.Run();
         }
+
+
     }
 
     public class WebServer {
@@ -197,7 +218,7 @@ span.testgroupname {
 
             try {
                 TestResult tr;
-                if ( !req.HttpMethod.ToUpper().Equals("POST") ) {
+                if ( req.HttpMethod.ToUpper().Equals("POST") ) {
                     var xsc = new XmlSerializer(typeof(TestResult));
                     tr = (TestResult)xsc.Deserialize(req.InputStream);
                 } else {

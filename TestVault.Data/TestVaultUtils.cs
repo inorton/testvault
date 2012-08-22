@@ -6,7 +6,7 @@ using System.Security;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace TestVault.NUnit
+namespace TestVault.Data
 {
     public class TestVaultUtils
     {
