@@ -32,6 +32,8 @@ namespace TestVault
                 Environment.Exit(0);
             } );
 
+            opts.Add("port=", "Listen on this port", (int x) => { w.ServerPort = x; } );
+
             opts.Parse( args );
 
             w.Run();
@@ -44,15 +46,21 @@ namespace TestVault
 
         ITestVaultData DataStore { get; set; }
 
+        public int ServerPort = 33333;
+
         public void Run()
         {
             var l = new HttpListener();
-            l.Prefixes.Add("http://+:33333/");
+            l.Prefixes.Add("http://+:" + ServerPort.ToString() + "/");
 
 
             l.Start();
 
+            Console.Error.WriteLine("listening on port {0}",ServerPort);
+
             DataStore = new TestStore().Open(Backend.SQLite);
+
+            Console.Error.WriteLine("waiting for requests");
 
             while (true)
             {
@@ -92,6 +100,7 @@ namespace TestVault
                     SubmitResult(ctx);
                 } else
                 {
+                    Console.Error.WriteLine( "request: {0}", req.Url );
                     var want = p.GetString("want");
 
                     switch ( want ){
