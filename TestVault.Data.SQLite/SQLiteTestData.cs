@@ -72,6 +72,15 @@ builds_idx ON results (
  BuildId 
 )");
 
+            NonQuery(conn,@"CREATE UNIQUE INDEX IF NOT EXISTS 
+tests_idx ON results (
+ Project,
+ TestGroup,
+ Name,
+ Session,
+ Outcome
+)");
+
 
 
             initCalled = true;
